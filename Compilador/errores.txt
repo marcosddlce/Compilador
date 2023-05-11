@@ -1,0 +1,6 @@
+Token no reconocido: & (linea: 1, columna: 15)
+Token no reconocido: @ (linea: 1, columna: 24)
+Token no reconocido: suma1 (linea: 1, columna: 29)
+Token no reconocido: suma2 (linea: 1, columna: 35)
+Token no reconocido: ! (linea: 56, columna: 5)
+Token no reconocido: ert67 (linea: 56, columna: 8)

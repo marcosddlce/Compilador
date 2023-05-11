@@ -1,0 +1,170 @@
+reserved keyword: int
+Identificador: vector
+Identificador: su
+Identificador: mas
+Identificador: res
+Identificador: tas
+Literal entero: 25
+Identificador: ert
+semicolon: ;
+reserved keyword: main
+reserved keyword: if
+left parenthesis: (
+reserved keyword: while
+right parenthesis: )
+reserved keyword: if
+Addition op: +
+Literal decimal: 34.34
+Literal decimal: 34.34
+Literal entero: 34
+Subtraction op: -
+Literal entero: 34
+Increment op: ++
+Increment op: ++
+Addition op: +
+Decrement op: --
+Decrement op: --
+Subtraction op: -
+reserved keyword: cin
+Greaterthan op: >
+Greaterthan op: >
+Greater than or equal to: >=
+Lessthan op: <
+Lessthan op: <
+Less than or equal to: <=
+Equality op: ==
+Assignment op: =
+Not equal op: !=
+left brace: {
+reserved keyword: int
+Identificador: x
+Identificador: y
+Identificador: z
+semicolon: ;
+reserved keyword: real
+Identificador: a
+Identificador: b
+Identificador: c
+semicolon: ;
+reserved keyword: cin
+Identificador: gfkh
+reserved keyword: int
+reserved keyword: real
+Identificador: x
+Assignment op: =
+Literal entero: 23
+semicolon: ;
+Identificador: y
+Assignment op: =
+Literal entero: 2
+Addition op: +
+Literal entero: 3
+Subtraction op: -
+Literal entero: 1
+semicolon: ;
+Identificador: z
+Assignment op: =
+Identificador: y
+Addition op: +
+Literal entero: 7
+semicolon: ;
+Identificador: a
+Assignment op: =
+Literal decimal: 24.0
+Addition op: +
+Literal entero: 4
+Subtraction op: -
+Literal entero: 1
+Multiplication op: *
+Literal entero: 3
+Division op: /
+Literal entero: 2
+Addition op: +
+Literal entero: 34
+Subtraction op: -
+Literal entero: 1
+semicolon: ;
+reserved keyword: if
+left parenthesis: (
+Literal entero: 2
+Greaterthan op: >
+Literal entero: 3
+right parenthesis: )
+Identificador: y
+Assignment op: =
+Identificador: a
+Addition op: +
+Literal entero: 3
+semicolon: ;
+reserved keyword: else
+reserved keyword: if
+left parenthesis: (
+Literal entero: 4
+Greaterthan op: >
+Literal entero: 2
+right parenthesis: )
+Identificador: b
+Assignment op: =
+Literal decimal: 3.2
+semicolon: ;
+reserved keyword: else
+Identificador: b
+Assignment op: =
+Literal decimal: 5.0
+semicolon: ;
+reserved keyword: end
+semicolon: ;
+Identificador: y
+Assignment op: =
+Identificador: y
+Addition op: +
+Literal entero: 1
+semicolon: ;
+reserved keyword: end
+semicolon: ;
+reserved keyword: do
+Identificador: y
+Assignment op: =
+left parenthesis: (
+Identificador: y
+Addition op: +
+Literal entero: 1
+right parenthesis: )
+Multiplication op: *
+Literal entero: 2
+Addition op: +
+Literal entero: 1
+semicolon: ;
+reserved keyword: until
+left parenthesis: (
+Identificador: y
+Equality op: ==
+Literal entero: 5
+right parenthesis: )
+semicolon: ;
+reserved keyword: while
+left parenthesis: (
+Identificador: y
+Equality op: ==
+Literal entero: 0
+right parenthesis: )
+left brace: {
+reserved keyword: cout
+Identificador: x
+semicolon: ;
+right brace: }
+semicolon: ;
+right brace: }
+reserved keyword: if
+Identificador: ya
+Identificador: se
+Identificador: termino
+reserved keyword: while
+reserved keyword: int
+Literal entero: 45
+Literal decimal: 45.67
+semicolon: ;
+reserved keyword: then
+Identificador: mas
+Identificador: lienas
+reserved keyword: while
