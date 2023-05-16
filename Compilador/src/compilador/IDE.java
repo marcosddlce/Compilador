@@ -23,6 +23,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Utilities;
 
 
 
@@ -66,57 +71,94 @@ public class IDE extends javax.swing.JFrame {
         return index;
     }
     
-    //METODO PARA PINTAR LAS PALABRAS RESERVADAS
+    //METODO PARA PINTAR LAS PALABRAS RESERVADAS//
     private void colors(){
         
         final StyleContext cont = StyleContext.getDefaultStyleContext();
         
         //COLORES
-        final AttributeSet attred = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(231, 152, 132));
-        final AttributeSet attblue = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(62,109,156));
-        final AttributeSet attyellow = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(255,217,102));
-        final AttributeSet attblack = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(0,0,0));
+        
+        final SimpleAttributeSet attred = new SimpleAttributeSet();
+        StyleConstants.setForeground(attred, Color.RED);
+        final SimpleAttributeSet attblue = new SimpleAttributeSet();
+        StyleConstants.setForeground(attblue, Color.BLUE);
+        final SimpleAttributeSet attgreen = new SimpleAttributeSet();
+        StyleConstants.setForeground(attgreen, Color.GREEN);
+        final SimpleAttributeSet attgray = new SimpleAttributeSet();
+        StyleConstants.setForeground(attgray, Color.GRAY);
+        final SimpleAttributeSet attblack = new SimpleAttributeSet();
+        StyleConstants.setForeground(attblack, Color.BLACK);
+        
+        // Palabras reservadas
+        String[] reservedWords = {"main", "if", "then", "else", "end", "do", "while", "repeat", "until", "cin", "cout", "real", "boolean", "int", "float", "char", "long"};
+
+        // Símbolos
+        String[] symbols = {"==", "<=", ">=", "!=", ":=", "\\+\\+", "--", "=", "\\+", "-", "/", "\\*", "<", ">", ":", ";", ",", "\\(", "\\)", "\\[", "\\]", "\\{", "\\}"};
+
         
         //STYLE
-        DefaultStyledDocument doc = new DefaultStyledDocument(){
-            public void insertString(int offset, String str, AttributeSet a) throws BadLocationException{
-                super.insertString(offset,str,a);
-                
-                String text = getText(0,getLength());
-                int before = findLastNonWordChar(text,offset);
-                if(before < 0){
-                    before = 0;
-                }
-                int after = findFirstNonWordChar(text, offset + str.length());
-                int wordL = before;
-                int wordR = before;
-                
-                while(wordR <= after){
-                    if(wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")){
-                        if(text.substring(wordL, wordR).matches
-                            ("(\\W)*(main|if|then|else|end|do|while|repeat|until|cin|cout|real|int|boolean)"))
-                            setCharacterAttributes(wordL,wordR - wordL,attblue, false);
-                        else if (text.substring(wordL, wordR).matches("(\\W)*(:|;|\\.|,|\\(|\\)|\\{|\\}|\\[|\\]|-|\\+|\\*|/|\\^|<|<=|>|>=|==|!=|=|\\+\\+|--).*"))
-                            setCharacterAttributes(wordL,wordR - wordL,attyellow, false);
-                        else if(text.substring(wordL, wordR).matches("(\\W)*(a|b|c|d)"))
-                            setCharacterAttributes(wordL,wordR - wordL,attred, false);
-                        else if (text.substring(wordL, wordR).matches("(\\W)*(\\d+).*"))
-                            setCharacterAttributes(wordL,wordR - wordL,attred, false);
-                        else
-                            setCharacterAttributes(wordL,wordR - wordL,attblack, false);
-                        wordL = wordR;
-                    }
-                    wordR ++;
-                }
-            }
+        DefaultStyledDocument doc = new DefaultStyledDocument() {
             
-            public void remove(int offs, int len) throws BadLocationException{
-                super.remove(offs, len);
-                
-                String text = getText(0,getLength());
-                int before = findLastNonWordChar(text,offs);
-                if(before < 0){
-                    before = 0;
+            public void insertString(int offset, String str, AttributeSet a) throws BadLocationException {
+                super.insertString(offset, str, a);
+
+                String text = getText(0, getLength());
+                int lineStart = Utilities.getRowStart(jtpCode, offset);
+                int lineEnd = Utilities.getRowEnd(jtpCode, offset);
+
+                if (lineStart >= 0 && lineEnd >= 0) {
+                    String lineText = text.substring(lineStart, lineEnd);
+
+                    if (lineText.contains("//")) {
+                        int commentIndex = lineText.indexOf("//");
+                        if (offset >= lineStart + commentIndex) {
+                            // Si la posición actual está dentro del comentario de una línea, se pinta de color gris
+                            setCharacterAttributes(lineStart + commentIndex, lineEnd - lineStart - commentIndex, attgray, false);
+                            return; // Se sale del método para evitar el procesamiento adicional
+                        }
+                    }
+                    String regex = "(//.*)|(/\\*([^*]|[\r\n]|(\\*+([^*/]|[\r\n])))*\\*+/)";
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(text);
+                    while (matcher.find()) {
+                        setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), attgray, false);
+                    }
+                    
+                    /// Pintar números enteros y decimales en verde
+                    // Pintar números enteros y decimales en verde
+                    Pattern numberPattern = Pattern.compile("\\b\\d+(\\.\\d+)?\\b");
+                    Matcher numberMatcher = numberPattern.matcher(lineText);
+                    while (numberMatcher.find()) {
+                        int start = lineStart + numberMatcher.start();
+                        int end = lineStart + numberMatcher.end();
+                        setCharacterAttributes(start, end - start, attgreen, false);
+                    }
+                    setCharacterAttributes(offset, str.length(), attblack, false);
+                    // Pintar palabras reservadas en azul
+                    for (String word : reservedWords) {
+                        Pattern reservedPattern = Pattern.compile("\\b" + word + "\\b");
+                        Matcher reservedMatcher = reservedPattern.matcher(lineText);
+                        while (reservedMatcher.find()) {
+                            int start = lineStart + reservedMatcher.start();
+                            int end = lineStart + reservedMatcher.end();
+                            setCharacterAttributes(start, end - start, attblue, false);
+                        }
+                    }
+                    setCharacterAttributes(offset, str.length(), attblack, false);
+                    // Pintar símbolos en rojo
+                    for (String symbol : symbols) {
+                        Pattern symbolPattern = Pattern.compile(symbol);
+                        Matcher symbolMatcher = symbolPattern.matcher(lineText);
+                        while (symbolMatcher.find()) {
+                            int start = lineStart + symbolMatcher.start();
+                            int end = lineStart + symbolMatcher.end();
+                            setCharacterAttributes(start, end - start, attred, false);
+                        }
+                    }
+                    setCharacterAttributes(offset, str.length(), attblack, false);
+                } else {
+                    // Establecer el color de texto predeterminado en negro
+                    setCharacterAttributes(offset, str.length(), attblack, false);
                 }
             }
         };
@@ -127,7 +169,7 @@ public class IDE extends javax.swing.JFrame {
         jtpCode.setText(temp);
     }
     
-    
+    //
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -277,7 +319,7 @@ public class IDE extends javax.swing.JFrame {
     private void btnTokensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTokensActionPerformed
         // TODO add your handling code here:
         // Ruta del script de Python
-        String pythonScriptPath = "C:\\Users\\mdavi\\OneDrive\\Documentos\\Nuevacarpeta\\Compilador\\main.py";
+        String pythonScriptPath = "C:\\Users\\mdavi\\OneDrive\\Escritorio\\Compilador\\main.py";
 
         // Texto del IDE que deseas analizar
         String ideText = jtpCode.getText();
